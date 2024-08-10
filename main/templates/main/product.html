@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% block content %}
+            {% load imgs %}
+            <div class="col-md-12">
+              <div class="card mb-12 box-shadow">
+                <img class="card-img-top" src="{{ img | media }}" >
+                <div class="card-body">
+                  <h4 class="card-text">{{name}}</h4>
+                  <h5 class="card-text">Цена: {{price}} р.</h5>
+                    <p class="card-text ">Категория: {{category | slice:'101'}}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <p class="card-text">{{description}}</p>
+                    <div class="btn">
+                      <button type="button" class="w-100 btn btn-lg btn-outline-success btn-success text-black ">Купить</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+{% endblock %}
