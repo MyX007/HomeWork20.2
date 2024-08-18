@@ -16,14 +16,19 @@
               <div class="card mb-4 box-shadow">
                 <div class="card-body">
                     <h2>
-                        Напишите нам!
+                        Свяжитесь с нами!
                     </h2>
                  <form method="post">
                      {% csrf_token %}
-                     <input class="form-control mb-2" name="name" />
-                     <input class="form-control mb-2" name="email" />
-                     <textarea class="form-control mb-2" name="message" >
-                     </textarea>
+
+                     <div class="mb-3">
+                          <label for="exampleFormControlInput1" class="form-label">Введите E-mail</label>
+                          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                     </div>
+                     <div class="mb-3">
+                          <label for="exampleFormControlTextarea1" class="form-label">Ваше сообщение</label>
+                          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                     </div>
                      <button type="submit" class="mb-2 btn btn-primary form_control">
                          Отправить
                      </button>
