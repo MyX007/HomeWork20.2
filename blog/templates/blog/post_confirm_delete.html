@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <div class="col-12" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <p>Хотите удалить публикацию '{{ object.title }}'?</p>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                        {% if object.is_published %}
+                            <a href="{% url 'blog:list' %}" class="btn btn-secondary">Назад</a>
+                        {% else %}
+                            <a href="{% url 'blog:archive' %}" class="btn btn-secondary">Назад</a>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'main/base.html' %}
+{% block content %}
+            {% load imgs %}
+            <div class="col-md-12">
+              <div class="card mb-12 box-shadow">
+                {% if object.preview_img %}
+                    <img class="card-img-top" src="{{ object.preview_img | media }}" alt="фывфыв">
+                {% endif %}
+                <div class="card-header">
+                    <a class="card-title">Публикация: {{ object.title }} ({{ object.slug }})</a>
+                    <p class="card-title"> Автор: {{ object.author }}</p>
+
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ object.content }}
+                    </p>
+                    </div>
+                  <div class="card-footer">
+                      <p class="card-text">Просмотры: {{ object.views_count }}</p>
+                      <p class="card-text">Дата публикации: {{ object.date_posted }}</p>
+                      {% if object.is_published %}
+                          <a href="{% url 'blog:list' %}" class="btn btn-secondary">Назад</a>
+                          <a class="btn btn-outline-secondary" href="{% url 'blog:is_published' object.pk %}" role="button">Убрать в архив</a>
+                      {% else %}
+                          <a href="{% url 'blog:archive' %}" class="btn btn-secondary">Назад</a>
+                          <a class="btn btn-outline-success" href="{% url 'blog:is_published' object.pk %}" role="button">Опубликовать</a>
+                      {% endif %}
+                  </div>
+                </div>
+              </div>
+
+
+{% endblock %}
