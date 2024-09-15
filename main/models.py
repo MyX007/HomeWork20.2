@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 # Create your models here.
 
 NULLABLE = {"blank": True, "null": True}
@@ -29,6 +31,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         verbose_name="Дата последнего изменения", auto_now=True
     )
+    seller = models.ForeignKey(User, verbose_name="Продавец", help_text="", blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} ({self.category}) - {self.price}"

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'main',
     'blog',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hw20_1',
+        'NAME': 'HW',
         'USER': 'postgres',
         'PASSWORD': '112233', # Пароль для этого пользователя
         'HOST': '127.0.0.1', # Адрес, на котором развернут сервер БД
@@ -134,3 +135,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "blyncev@yandex.ru"
+EMAIL_HOST_PASSWORD = "flylpjcfvyaeqqqa"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

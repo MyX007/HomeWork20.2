@@ -12,7 +12,7 @@ urlpatterns = [
     path('edit/<int:pk>/', PostUpdateView.as_view(), name='edit'),
     path('view/<int:pk>/', PostDetailView.as_view(), name='view'),
     path('delete/<int:pk>/', PostDeleteView.as_view(), name='delete'),
-    path('is_published/<int:pk>', toggle_is_published, name='is_published'),
+    path('is_published/<int:pk>/', toggle_is_published, name='is_published'),
     path('archive/', PostArchiveListView.as_view(), name='archive'),
 
 ]
