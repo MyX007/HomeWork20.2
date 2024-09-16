@@ -32,6 +32,7 @@ class Product(models.Model):
         verbose_name="Дата последнего изменения", auto_now=True
     )
     seller = models.ForeignKey(User, verbose_name="Продавец", help_text="", blank=True, null=True, on_delete=models.CASCADE)
+    is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
 
     def __str__(self):
         return f"{self.name} ({self.category}) - {self.price}"
@@ -39,6 +40,9 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
+        permissions = [
+            ("can_publicate_product", "Can publicate product"),
+        ]
 
 
 class Version(models.Model):
@@ -52,7 +56,7 @@ class Version(models.Model):
     )
     version_index = models.CharField(max_length=20, verbose_name="Номер версии")
     version_name = models.CharField(max_length=150, verbose_name="Название")
-    is_actual = models.BooleanField(default=True, verbose_name="Актуальная версия")
+    is_actual = models.BooleanField(default=False, verbose_name="Актуальная версия")
 
     def __str__(self):
         return f"{self.version_name} ({self.version_index})"

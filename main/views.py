@@ -1,18 +1,21 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
-from main.forms import ProductForm, VersionForm
+from main.forms import ProductForm, VersionForm, ProductModeratorForm
 from main.models import Product, Version
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
 
-class ProductsListView(ListView):
+class ProductsListView(LoginRequiredMixin, ListView):
     model = Product
 
 
-class ProductCreateView(CreateView, LoginRequiredMixin):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'main.add_product'
     success_url = reverse_lazy('main:index')
 
     def get_context_data(self, **kwargs):
@@ -44,9 +47,10 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductUpdateView(UpdateView, LoginRequiredMixin):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'main.change_product'
     success_url = reverse_lazy('main:product')
 
     def get_success_url(self):
@@ -63,6 +67,15 @@ class ProductUpdateView(UpdateView, LoginRequiredMixin):
 
         return context_data
 
+    def get_form_class(self):
+        user = self.request.user
+
+        if user == self.object.seller:
+            return ProductForm
+        if user.has_perm('main.can_publicate_product'):
+            return ProductModeratorForm
+        raise PermissionDenied
+
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
@@ -76,11 +89,11 @@ class ProductUpdateView(UpdateView, LoginRequiredMixin):
             return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
 
-class ContactView(TemplateView):
+class ContactView(LoginRequiredMixin, TemplateView):
     template_name = 'main/contact.html'
 
     def get_context_data(self, **kwargs):
@@ -88,6 +101,7 @@ class ContactView(TemplateView):
         context['title'] = 'Свяжитесь с нами'
 
 
-class ProductDeleteView(DeleteView, LoginRequiredMixin):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('main:index')
+    permission_required = 'main.delete_product'

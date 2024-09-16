@@ -1,19 +1,25 @@
 {% extends 'main/base.html' %}
 {% block content %}
     <div class="col-12 mb-4">
-    {% if user.is_authenticated %}
+    {% if perms.main.add_product %}
         <a class="btn btn-outline-primary" href="{% url 'main:create' %}">Добавить продукт</a>
     {% endif %}
     </div>
             {% for object in object_list %}
             {% load imgs %}
+                {% if object.is_published or perms.main.can_publicate_product%}
             <div class="col-4">
               <div class="card  box-shadow">
                   {% if object.img %}
                     <img class="card-img-top" src="{{ object.img | media }}" alt="фывфыв">
                 {% endif %}
                 <div class="card-header">
-                    <p class="card-title">{{object.name | title}}</p>
+                    <p class="card-title">
+                        {{object.name | title}}
+                    </p>
+                    {% if object.is_published == False %}
+                        <p class="text-danger  ">(Не опуликовано)</p>
+                      {% endif %}
                 </div>
                 <div class="card-body">
                     <p class="card-subtitle text-muted">Цена: {{object.price}} р.</p>
@@ -31,8 +37,11 @@
 
                       <div class="btn-group btn-group-sm">
                         <a class="btn btn-primary" href="{% url 'main:product' object.pk %}" role="button">Подробнее</a>
-                          {% if user.is_authenticated %}
+                          {% if user == object.seller or perms.main.can_change %}
+
                         <a class="btn btn-secondary" href="{% url 'main:update' object.pk %}" role="button">Редактировать</a>
+                              {% endif %}
+                      {% if user == object.seller %}
                         <a class="btn btn-danger" href="{% url 'main:delete' object.pk %}" role="button">Удалить</a>
                           {% endif %}
 
@@ -42,6 +51,6 @@
                 </div>
               </div>
 
-
+            {% endif %}
             {% endfor %}
 {% endblock %}
