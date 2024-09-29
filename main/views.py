@@ -1,11 +1,13 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
+
 from main.forms import ProductForm, VersionForm, ProductModeratorForm
 from main.models import Product, Version
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
+
+from main.services import get_caches_versions_for_products
 
 
 class ProductsListView(LoginRequiredMixin, ListView):
@@ -91,6 +93,12 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['versions'] = get_caches_versions_for_products(self.object.pk)
+
+        return context_data
 
 
 class ContactView(LoginRequiredMixin, TemplateView):
