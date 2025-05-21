@@ -55,7 +55,7 @@ jobs:
         run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKE_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKE_HUB_USERNAME }}/myapp:${{ github.sha }}
+        run: docker build -t ${{ secrets.DOCKE_HUB_USERNAME }}/myapp:${{ github.sha }} .
 
       - name: Push docker image in DockerHub
         run: docker push ${{ secrets.DOCKE_HUB_USERNAME }}/myapp:${{ github.sha }}
